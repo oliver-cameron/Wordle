@@ -1,0 +1,42 @@
+.letter{
+    width: 120px;
+    height: 120px;
+    color: #000;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 43px;
+    font-weight: bold;
+    line-height: 30px;
+    border-radius: 15px;
+    text-align: center;
+    position: absolute;
+    background-color:#9cdcfe;
+    opacity: 1.0;
+}
+#board{
+    width: 740px;
+    height: 100vh;
+    background-color: #929292;
+    border-radius: 15px;
+    position: absolute;
+    top: 0px;
+    left:350px;
+}
+.word{
+    position: relative;
+    width: 720px;
+    height: 120px;
+    background-color:#117acc ;
+    border-radius: 15px;
+    border: 5px solid #117acc;
+    left: 5px;
+    top: 0px;
+}
+body{
+    color: #000;
+}
+html{
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+    background: #141414;
+}

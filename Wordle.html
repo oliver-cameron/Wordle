@@ -2,54 +2,65 @@
 <html lang="en">
     <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Wordle</title>
     <link rel="stylesheet" href="Wordle-style.css">
-    <link href="'https://raw.githubusercontent.com/dwyl/english-words/master/words.txt'">
     <script src="Wordle.js"></script>
     <body>
+        <div id="time">
+            <p style="font-size: 50px; font-family: Arial, Helvetica, sans-serif; font-weight: 700; top:-70px; position: relative;"><span id="times"></span></p>
+        </div>
         <div id="board">
-            <div id="guess1" class="word" style="top:5px">
-                <div class="letter" id="word1letter1" style="left:20px;top:0"></div>
-                <div class="letter" id="word1letter2" style="left:160px;top:-120"></div>
-                <div class="letter" id="word1letter3" style="left:300px;top:0"></div>
-                <div class="letter" id="word1letter4" style="left:440px;top:0"></div>
-                <div class="letter" id="word1letter5" style="left:580px;top:0"></div>
+        </div>
+        <div id="suggestions">
+            <div style="width:100%; height:10%;font-size: 40px; font-family: Arial Rounded MT Bold, Helvetica, sans-serif; font-weight: bolder; text-align: center;">SUGGESTIONS</div>
+            <div id="suggestionsInner">
             </div>
-            <div id="guess2" class="word" style="top:10px">
-                <div class="letter" id="word2letter1" style="left:20px;top:0"></div>
-                <div class="letter" id="word2letter2" style="left:160px;top:-120"></div>
-                <div class="letter" id="word2letter3" style="left:300px;top:0"></div>
-                <div class="letter" id="word2letter4" style="left:440px;top:0"></div>
-                <div class="letter" id="word2letter5" style="left:580px;top:0"></div>
+        </div>
+        <div id="notifications">
+        </div>
+        <div id="winModal" style="padding: 20px;;">
+            <p style="font-size: 100px; font-family: Arial, Helvetica, sans-serif; font-weight: 700; top:-70px; position: relative;">You win</p>
+            <p style="font-size: 50px; font-family: Arial, Helvetica, sans-serif; font-weight: 700; top:-70px; position: relative;">You completed this wordle in <span id="score"></span></p>
+            <p style="font-size: 50px; font-family: Arial, Helvetica, sans-serif; font-weight: 700; top:-70px; position: relative;">You completed this wordle in <span id="tries"></span></p>
+            <button class="playAgain" onclick="refresh2();"><span style="position: relative;top:-30px;">Play Again</span></button>
+        </div>
+        <div id="loseModal" style="padding: 20px;;">
+            <p style="font-size: 100px; font-family: Arial, Helvetica, sans-serif; font-weight: 700; top:-70px; position: relative;">You Lost...</p>
+            <p style="font-size: 50px; font-family: Arial, Helvetica, sans-serif; font-weight: 700; top:-70px; position: relative;">You had <span id="left"></span> words left.</p>
+            <button class="playAgain" onclick="refresh2();"><span style="position: relative;top:-30px;">Try Again</span></button>
+        </div>
+        <div id="startModal" style="padding: 20px;">
+            <div style="width:270px;position:relative;height:240px;left:0px">
+                <p style="font-size: 23px; font-family: Darumadrop; font-weight: 900;text-align: center; position: relative;left:30px">Choose your difficulty</p>
+                <div>
+                    <div id="levelEasy" style="width:120px;height:120px;position: relative; background: #88C796;border-radius: 15px;left:0px;top:0px;font-size: 23px; font-family: Darumadrop; font-weight: 900;text-align: center;vertical-align: middle;line-height: 11px;" onclick="modeEasy()">
+                        <span style="position: absolute; top: 55px; left:35px">Easy</span>
+                    </div>
+                    <div id="levelMedium" style="width:120px;height:120px;position: relative; background: #88C796;border-radius: 15px;left:125px;top:-120px;font-size: 23px; font-family: Darumadrop; font-weight: 900;text-align: center;vertical-align: middle;line-height: 11px;" onclick="modeMedium()">
+                        <span style="position: absolute; top: 55px; left:15px">Medium</span></div>
+                    <div id="levelHard" style="width:120px;height:120px;position: relative; background: #88C796;border-radius: 15px;left:250px;top:-240px;font-size: 23px; font-family: Darumadrop; font-weight: 900;text-align: center;vertical-align: middle;line-height: 11px;" onclick="modeHard()">
+                        <span style="position: absolute; top: 55px; left:30px">Hard</span></div>
+                </div>
+                <div style="width: calc(80vw - 400px);height:120px;position: relative; background: #4059adcc;border-radius: 15px;left:385px;top:-360px;font-size: 23px; font-family: Darumadrop; font-weight: 900;text-align: center;vertical-align: middle;line-height: 11px;">
+                    <span id="levelexplin" style="text-align: center;vertical-align:sub;line-height: 50px"></span></div>
+                </div>
+                <div style="font-size: 25px; font-family:  Arial Rounded MT Bold, Helvetica, sans-serif;font-weight: lighter;">
+                    <p>Welcome to Wordle!</p>
+                    <p>First, Find your level: <span id="level" style="font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: 100;"></span></p>
+                    <p><span id="c1">Next</span><span id="c2">, You</span><span id="c3">r co</span><span id="c4">lour</span> <span id="c5">sche</span><span id="c6">me.</span></p>
+                </div>
+                <div style="width:270px;position:relative;height:240px;left:0px">
+                    <div>
+                        <input value="#117acc"type="color"id="colour2" style="border:3px black solid;width:120px;height:120px;position: absolute; background: #117acc;border-radius: 15px;left:125px;top:0px;font-size: 23px; font-family: Darumadrop; font-weight: 900;text-align: center;vertical-align: middle;line-height: 11px;" ></input>
+                        <input value="#9cd4fe"type="color"id="colour1" style="border:3px black solid;width:120px;height:120px;position: absolute; background: #9cd4fe;border-radius: 15px;left:0px;top:0px;font-size: 23px; font-family: Darumadrop; font-weight: 900;text-align: center;vertical-align: middle;line-height: 11px;" ></input>
+                        <input value="#4059ad"type="color"id="colour3" style="border:3px black solid;width:120px;height:120px;position: absolute; background: #4059ad;border-radius: 15px;left:250px;top:0px;font-size: 23px; font-family: Darumadrop; font-weight: 900;text-align: center;vertical-align: middle;line-height: 11px;" ></input>
+                        <input value="#88C796"type="color"id="colour4" style="border:3px black solid;width:120px;height:120px;position: absolute; background: #88C796;border-radius: 15px;left:375px;top:0px;font-size: 23px; font-family: Darumadrop; font-weight: 900;text-align: center;vertical-align: middle;line-height: 11px;" ></input>
+                        <input value="#dcc193"type="color"id="colour5" style="border:3px black solid;width:120px;height:120px;position: absolute; background: #dcc193;border-radius: 15px;left:500px;top:0px;font-size: 23px; font-family: Darumadrop; font-weight: 900;text-align: center;vertical-align: middle;line-height: 11px;" ></input>
+                        <input value="#9c9c9c"type="color"id="colour6" style="border:3px black solid;width:120px;height:120px;position: absolute; background: #9c9c9c;border-radius: 15px;left:625px;top:0px;font-size: 23px; font-family: Darumadrop; font-weight: 900;text-align: center;vertical-align: middle;line-height: 11px;" ></input>
+                    </div>
+                    
+                    </div>
             </div>
-            <div id="guess3" class="word" style="top:15px">
-                <div class="letter" id="word3letter1" style="left:20px;top:0"></div>
-                <div class="letter" id="word3letter2" style="left:160px;top:-120"></div>
-                <div class="letter" id="word3letter3" style="left:300px;top:0"></div>
-                <div class="letter" id="word3letter4" style="left:440px;top:0"></div>
-                <div class="letter" id="word3letter5" style="left:580px;top:0"></div>
-            </div>
-            <div id="guess4" class="word" style="top:20px">
-                <div class="letter" id="word4letter1" style="left:20px;top:0"></div>
-                <div class="letter" id="word4letter2" style="left:160px;top:-120"></div>
-                <div class="letter" id="word4letter3" style="left:300px;top:0"></div>
-                <div class="letter" id="word4letter4" style="left:440px;top:0"></div>
-                <div class="letter" id="word4letter5" style="left:580px;top:0"></div>
-            </div>
-            <div id="guess5" class="word" style="top:25px">
-                <div class="letter" id="word5letter1" style="left:20px;top:0"></div>
-                <div class="letter" id="word5letter2" style="left:160px;top:-120"></div>
-                <div class="letter" id="word5letter3" style="left:300px;top:0"></div>
-                <div class="letter" id="word5letter4" style="left:440px;top:0"></div>
-                <div class="letter" id="word5letter5" style="left:580px;top:0"></div>
-            </div>
-            <div id="guess6" class="word" style="top:30px">
-                <div class="letter" id="word6letter1" style="left:20px;top:0"></div>
-                <div class="letter" id="word6letter2" style="left:160px;top:-120"></div>
-                <div class="letter" id="word6letter3" style="left:300px;top:0"></div>
-                <div class="letter" id="word6letter4" style="left:440px;top:0"></div>
-                <div class="letter" id="word6letter5" style="left:580px;top:0"></div>
             </div>
         </div>
     </body>

@@ -1,11 +1,5 @@
  <!DOCTYPE html>
 <html lang="en">
-    <head>
-    <meta charset="UTF-8">
-    <title>Wordle</title>
-    <link rel="stylesheet" href="Wordle-style.css">
-    <script src="Wordle.js"></script>
-    <body>
         <div id="time">
             <p style="font-size: 50px; font-family: Arial, Helvetica, sans-serif; font-weight: 700; top:-70px; position: relative;"><span id="times"></span></p>
         </div>
@@ -51,18 +45,25 @@
                 </div>
                 <div style="width:270px;position:relative;height:240px;left:0px">
                     <div>
-                        <input value="#117acc"type="color"id="colour2" style="border:3px black solid;width:120px;height:120px;position: absolute; background: #117acc;border-radius: 15px;left:125px;top:0px;font-size: 23px; font-family: Darumadrop; font-weight: 900;text-align: center;vertical-align: middle;line-height: 11px;" ></input>
-                        <input value="#9cd4fe"type="color"id="colour1" style="border:3px black solid;width:120px;height:120px;position: absolute; background: #9cd4fe;border-radius: 15px;left:0px;top:0px;font-size: 23px; font-family: Darumadrop; font-weight: 900;text-align: center;vertical-align: middle;line-height: 11px;" ></input>
-                        <input value="#4059ad"type="color"id="colour3" style="border:3px black solid;width:120px;height:120px;position: absolute; background: #4059ad;border-radius: 15px;left:250px;top:0px;font-size: 23px; font-family: Darumadrop; font-weight: 900;text-align: center;vertical-align: middle;line-height: 11px;" ></input>
-                        <input value="#88C796"type="color"id="colour4" style="border:3px black solid;width:120px;height:120px;position: absolute; background: #88C796;border-radius: 15px;left:375px;top:0px;font-size: 23px; font-family: Darumadrop; font-weight: 900;text-align: center;vertical-align: middle;line-height: 11px;" ></input>
-                        <input value="#dcc193"type="color"id="colour5" style="border:3px black solid;width:120px;height:120px;position: absolute; background: #dcc193;border-radius: 15px;left:500px;top:0px;font-size: 23px; font-family: Darumadrop; font-weight: 900;text-align: center;vertical-align: middle;line-height: 11px;" ></input>
-                        <input value="#9c9c9c"type="color"id="colour6" style="border:3px black solid;width:120px;height:120px;position: absolute; background: #9c9c9c;border-radius: 15px;left:625px;top:0px;font-size: 23px; font-family: Darumadrop; font-weight: 900;text-align: center;vertical-align: middle;line-height: 11px;" ></input>
+                        <input value="#117acc"type="color"id="colour2" style="border:3px black solid;width:120px;height:120px;position: absolute; background: #117acc;border-radius: 15px;left:0px;top:0px;font-size: 23px; font-family: Darumadrop; font-weight: 900;text-align: center;vertical-align: middle;line-height: 11px;" onchange="document.getElementById('colour2').style.background = document.getElementById('colour2').value"></input>
+                        <input value="#9cd4fe"type="color"id="colour1" style="border:3px black solid;width:120px;height:120px;position: absolute; background: #9cd4fe;border-radius: 15px;left:125px;top:0px;font-size: 23px; font-family: Darumadrop; font-weight: 900;text-align: center;vertical-align: middle;line-height: 11px;" onchange="document.getElementById('colour1').style.background = document.getElementById('colour1').value"></input>
+                        <input value="#4059ad"type="color"id="colour3" style="border:3px black solid;width:120px;height:120px;position: absolute; background: #4059ad;border-radius: 15px;left:250px;top:0px;font-size: 23px; font-family: Darumadrop; font-weight: 900;text-align: center;vertical-align: middle;line-height: 11px;" onchange="document.getElementById('colour3').style.background = document.getElementById('colour3').value"></input>
+                        <input value="#88C796"type="color"id="colour4" style="border:3px black solid;width:120px;height:120px;position: absolute; background: #88C796;border-radius: 15px;left:375px;top:0px;font-size: 23px; font-family: Darumadrop; font-weight: 900;text-align: center;vertical-align: middle;line-height: 11px;" onchange="document.getElementById('colour4').style.background = document.getElementById('colour4').value"></input>
+                        <input value="#dcc193"type="color"id="colour5" style="border:3px black solid;width:120px;height:120px;position: absolute; background: #dcc193;border-radius: 15px;left:500px;top:0px;font-size: 23px; font-family: Darumadrop; font-weight: 900;text-align: center;vertical-align: middle;line-height: 11px;" onchange="document.getElementById('colour5').style.background = document.getElementById('colour5').value"></input>
+                        <input value="#9c9c9c"type="color"id="colour6" style="border:3px black solid;width:120px;height:120px;position: absolute; background: #9c9c9c;border-radius: 15px;left:625px;top:0px;font-size: 23px; font-family: Darumadrop; font-weight: 900;text-align: center;vertical-align: middle;line-height: 11px;" onchange="document.getElementById('colour6').style.background = document.getElementById('colour6').value"></input>
                     </div>
                     
                     </div>
+                    <div id="gobutton" style="width: calc(80vw - 30px);height:120px;position: absolute; background: #4059adcc;border-radius: 15px;left:15px;bottom:15px;font-size: 23px; font-family: Darumadrop; font-weight: 900;text-align: center;vertical-align: middle;line-height: 11px;text-align: center;vertical-align:sub;line-height: 50px; display: none;" onclick="gotime()">Cool. Let's Play!</div>
             </div>
             </div>
         </div>
     </body>
-    
+    <head>
+        <meta charset="UTF-8">
+        <title>Wordle</title>
+        <link rel="stylesheet" href="Wordle-style.css">
+        <script src="Wordle.js"></script>
+        </head>
+        <body>
 </html>

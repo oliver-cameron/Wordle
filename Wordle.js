@@ -1,12 +1,11 @@
 var refresh = "";
 var mode = "easy"
-var go = false
 var refreshSuggest = "";
 var win = false;
 var keypress = false;
 var time = 0;
 var loc = { x: 0, y: 0 };
-var scheme = ["#117acc","#9cd4fe","#4059ad","#88C796","#dcc193","#9c9c9c"]
+var scheme = [document.getElementById("colour2").value,document.getElementById("colour1").value,document.getElementById("colour3").value,document.getElementById("colour4").value,document.getElementById("colour5").value,document.getElementById("colour6").value]
 function modeEasy() {
   document.getElementById('levelEasy').style.background = "#9CD4FE";
   document.getElementById('levelMedium').style.background = "#88C796";
@@ -14,15 +13,9 @@ function modeEasy() {
   document.getElementById('level').innerText = "Easy? Nice way to start off, I suppose.";
   document.getElementById('levelexplin').innerText = 'This mode will give you unlimited time and you can choose any word you like.';
    mode = 'easy'
-}
-function modeMedium() {
-  document.getElementById('levelEasy').style.background = "#88C796";
-  document.getElementById('levelMedium').style.background = "#9CD4FE";
-  document.getElementById('levelHard').style.background = "#88C796";
-  document.getElementById('level').innerText = "Medium? Not too easy, not too hard.";
-  document.getElementById('levelexplin').innerText = 'This mode will give you a time limit of 3 miniutes to solve the Wordle and you can choose any word you like.';
-  mode = 'medium'
-}
+  document.getElementById("gobutton").style.display = "block";
+  }
+
 function modeHard(){
   document.getElementById('levelEasy').style.background = "#88C796";
   document.getElementById('levelMedium').style.background = "#88C796";
@@ -30,6 +23,7 @@ function modeHard(){
   document.getElementById('level').innerText = "Hard? Up for a challenge, I presume.";
   document.getElementById('levelexplin').innerText = 'This mode will give you 10 seconds for each guess or it will enter your last guess. You can only choose from the words in the list.';
   mode = 'hard'
+  document.getElementById("gobutton").style.display = "block";
 }
 var board = [
   [
@@ -2036,104 +2030,6 @@ function getRandomInt(min, max) {
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
 }
-document.addEventListener("keydown", function (event) {
-  keydown = event.key;
-  document.getElementById("notifications").style.display = "none";
-  if (keydown == "Control") {
-    refresh2()        
-  }
-  if (
-    keydown.toLowerCase().charCodeAt(0) > 96 &&
-    keydown.toLowerCase().charCodeAt(0) < 123 &&
-    keydown.split("").length == 1 &&
-    keypress == false &&
-    keydown !== " "
-  ) {
-    if (loc.x <= 4 && board[loc.y][loc.x].text == "") {
-      board[loc.y][loc.x].text = keydown.toUpperCase();
-    }
-    if (loc.x < 4) {
-      loc.x++;
-      keypress = true;
-    }
-  }
-  if (
-    keydown == "Enter" &&
-    keypress == false &&
-    loc.x == 4 &&
-    board[loc.y][loc.x].text !== ""
-  ) {
-    if (
-      words.includes(
-        `${board[loc.y].map(({ text }) => text.toLowerCase())[0]}${
-          board[loc.y].map(({ text }) => text.toLowerCase())[1]
-        }${board[loc.y].map(({ text }) => text.toLowerCase())[2]}${
-          board[loc.y].map(({ text }) => text.toLowerCase())[3]
-        }${board[loc.y].map(({ text }) => text.toLowerCase())[4]}`
-      )
-    ) {
-      for (var l = 0; l < 5; l++) {
-        board[loc.y][l].colour = check(
-          board[loc.y].map(({ text }) => text.toLowerCase()),
-          secretWord.split("")
-        )[l];
-      }
-      funnel();
-      if (
-        board[loc.y]
-          .map(({ colour }) => colour)
-          .filter(function blah(x) {
-            return x == scheme[2];
-          }).length == 5
-      ) {
-        setTimeout(() => {
-          win = true;
-          document.getElementById("winModal").style.display = "block";
-          document.getElementById("score").innerText = `${Math.floor(
-            Math.floor((Date.now() - time) / 1000) / 60
-          )}:${Math.floor((Date.now() - time) / 1000) % 60}`;
-          if (loc.y > 1) {
-            document.getElementById("tries").innerText = `${loc.y} tries`;
-          } else {
-            document.getElementById("tries").innerText = `${loc.y} try`;
-          }
-        }, 500);
-      }
-      refreshSuggest = "";
-      for (m = 0; m < left.length; m++) {
-        refreshSuggest = refreshSuggest.concat(
-          `<div style="position: relative; top:${
-            5 * m
-          };font-size:30px;font-family: Arial Rounded MT Bold, Helvetica, sans-serif; font-weight: bolder; text-align: center;">${
-            left[m]
-          }</div>`
-        );
-      }
-      document.getElementById("suggestionsInner").innerHTML = refreshSuggest;
-      loc.x = 0;
-      loc.y++;
-      setTimeout(() => {
-        if (loc.y == 6 && win == false) {
-          document.getElementById("loseModal").style.display = "block";
-          document.getElementById("left").innerText = `${left.length}`;
-        }
-      }, 10);
-    } else {
-      document.getElementById("notifications").innerText = "Not a word";
-      document.getElementById("notifications").style.display = "block";
-      document.getElementById("notifications").style.background = board[0][2];
-      document.getElementById("notifications").style.color = "#ff4444";
-    }
-  }
-  if (keydown == "Backspace" && keypress == false) {
-    board[loc.y][loc.x].text = "";
-    keypress = true;
-    if (loc.x > 0) {
-      loc.x--;
-    }
-  }
-  console.log(keydown);
-});
 document.addEventListener("keyup", function (event) {
   keyup = event.key;
   if (
@@ -2322,6 +2218,8 @@ setInterval(() => {
     );
     document.getElementById("board").innerHTML = refresh;
   }
+}, 1);
+setInterval(() => {
   document.getElementById("times").innerText = `${Math.floor(
     Math.floor((Date.now() - time) / 1000) / 60
   )
@@ -2347,4 +2245,109 @@ function funnel() {
     }
     return true;
   });
+}
+function gotime(){
+  document.getElementById('startModal').style.display = 'none';
+document.addEventListener("keydown", function (event) {
+  keydown = event.key;
+  document.getElementById("notifications").style.display = "none";
+  if (keydown == "Control") {
+    refresh2()        
+  }
+  if (
+    keydown.toLowerCase().charCodeAt(0) > 96 &&
+    keydown.toLowerCase().charCodeAt(0) < 123 &&
+    keydown.split("").length == 1 &&
+    keypress == false &&
+    keydown !== " "
+  ) {
+    if (loc.x <= 4 && board[loc.y][loc.x].text == "") {
+      board[loc.y][loc.x].text = keydown.toUpperCase();
+    }
+    if (loc.x < 4) {
+      loc.x++;
+      keypress = true;
+    }
+  }
+  if (
+    keydown == "Enter" &&
+    keypress == false &&
+    loc.x == 4 &&
+    board[loc.y][loc.x].text !== ""
+  ) {
+    if (
+      words.includes(
+        `${board[loc.y].map(({ text }) => text.toLowerCase())[0]}${
+          board[loc.y].map(({ text }) => text.toLowerCase())[1]
+        }${board[loc.y].map(({ text }) => text.toLowerCase())[2]}${
+          board[loc.y].map(({ text }) => text.toLowerCase())[3]
+        }${board[loc.y].map(({ text }) => text.toLowerCase())[4]}`
+      )
+    ) {
+      for (var l = 0; l < 5; l++) {
+        board[loc.y][l].colour = check(
+          board[loc.y].map(({ text }) => text.toLowerCase()),
+          secretWord.split("")
+        )[l];
+      }
+      funnel();
+      if (
+        board[loc.y]
+          .map(({ colour }) => colour)
+          .filter(function blah(x) {
+            return x == scheme[3];
+          }).length == 5
+      ) {
+        setTimeout(() => {
+          win = true;
+          document.getElementById("winModal").style.display = "block";
+          document.getElementById("score").innerText = `${Math.floor(
+            Math.floor((Date.now() - time) / 1000) / 60
+          )}:${Math.floor((Date.now() - time) / 1000) % 60}`;
+          if (loc.y > 1) {
+            document.getElementById("tries").innerText = `${loc.y} tries`;
+          } else {
+            document.getElementById("tries").innerText = `${loc.y} try`;
+          }
+        }, 200);
+      }
+      refreshSuggest = "";
+      for (m = 0; m < left.length; m++) {
+        refreshSuggest = refreshSuggest.concat(
+          `<div style="position: relative; top:${
+            5 * m
+          };font-size:30px;font-family: Arial Rounded MT Bold, Helvetica, sans-serif; font-weight: bolder; text-align: center;">${
+            left[m]
+          }</div>`
+        );
+      }
+      document.getElementById("suggestionsInner").innerHTML = refreshSuggest;
+      loc.x = 0;
+      loc.y++;
+      setTimeout(() => {
+        if (loc.y == 6 && win == false) {
+          document.getElementById("loseModal").style.display = "block";
+          document.getElementById("left").innerText = `${left.length}`;
+        }
+      }, 500);
+    } else {
+      document.getElementById("notifications").innerText = "Not a word";
+      document.getElementById("notifications").style.display = "block";
+      document.getElementById("notifications").style.background = board[0][2];
+      document.getElementById("notifications").style.color = "#ff4444";
+    }
+  }
+  if (keydown == "Backspace" && keypress == false) {
+    board[loc.y][loc.x].text = "";
+    keypress = true;
+    if (loc.x > 0) {
+      loc.x--;
+    }
+  }
+  console.log(keydown);
+});
+
+time = Date.now();
+document.getElementById("suggestionsInner").style.overflowY = "scroll";
+document.getElementById("time").style.display = "block";
 }

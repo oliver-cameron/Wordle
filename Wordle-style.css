@@ -87,6 +87,7 @@ html{
     line-height: 100px;
     color: #000;
     letter-spacing: 5px;
+    display: none;
 }
 .playAgain{
     position: absolute;
@@ -121,7 +122,7 @@ html{
     overflow-x:hidden;
     background: #117acc;
     border-radius: 15px;
-    overflow-y: scroll;
+    overflow-y: hidden;
 }
 #notifications{
     width: calc(120px - 4px);

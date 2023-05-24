@@ -1,28 +1,63 @@
 var refresh = "";
-var mode = "easy"
+var mode = "easy";
 var refreshSuggest = "";
 var win = false;
 var keypress = false;
 var time = 0;
 var loc = { x: 0, y: 0 };
-var scheme = [document.getElementById("colour2").value,document.getElementById("colour1").value,document.getElementById("colour3").value,document.getElementById("colour4").value,document.getElementById("colour5").value,document.getElementById("colour6").value]
+var hardtime;
+var medtime;
+cchange1();
+cchange2();
+cchange3();
+cchange4();
+cchange5();
+cchange6();
+function cchange2(){document.getElementById('colour2').style.background = document.getElementById('colour2').value; document.getElementById("c2").style.color = document.getElementById('colour2').value}
+function cchange1(){document.getElementById('colour1').style.background = document.getElementById('colour1').value; document.getElementById("c1").style.color = document.getElementById('colour1').value}
+function cchange3(){document.getElementById('colour3').style.background = document.getElementById('colour3').value; document.getElementById("c3").style.color = document.getElementById('colour3').value}
+function cchange4(){document.getElementById('colour4').style.background = document.getElementById('colour4').value; document.getElementById("c4").style.color = document.getElementById('colour4').value; document.getElementById("key1").style.color = document.getElementById('colour4').value;}
+function cchange5(){document.getElementById('colour5').style.background = document.getElementById('colour5').value; document.getElementById("c5").style.color = document.getElementById('colour5').value; document.getElementById("key2").style.color = document.getElementById('colour5').value;}
+function cchange6(){document.getElementById('colour6').style.background = document.getElementById('colour6').value; document.getElementById("c6").style.color = document.getElementById('colour6').value; document.getElementById("key3").style.color = document.getElementById('colour6').value;}
+var scheme = [
+  document.getElementById("colour2").value,
+  document.getElementById("colour1").value,
+  document.getElementById("colour3").value,
+  document.getElementById("colour4").value,
+  document.getElementById("colour5").value,
+  document.getElementById("colour6").value,
+];
 function modeEasy() {
-  document.getElementById('levelEasy').style.background = "#9CD4FE";
-  document.getElementById('levelMedium').style.background = "#88C796";
-  document.getElementById('levelHard').style.background = "#88C796";
-  document.getElementById('level').innerText = "Easy? Nice way to start off, I suppose.";
-  document.getElementById('levelexplin').innerText = 'This mode will give you unlimited time and you can choose any word you like.';
-   mode = 'easy'
+  document.getElementById("levelEasy").style.background = scheme[1];
+  document.getElementById("levelMedium").style.background = scheme[3];
+  document.getElementById("levelHard").style.background = scheme[3];
+  document.getElementById("level").innerText =
+    "Easy? Nice way to start off, I suppose.";
+  document.getElementById("levelexplin").innerText =
+    "This mode will give you unlimited time and you can choose any word you like.";
+  mode = "easy";
   document.getElementById("gobutton").style.display = "block";
-  }
-
-function modeHard(){
-  document.getElementById('levelEasy').style.background = "#88C796";
-  document.getElementById('levelMedium').style.background = "#88C796";
-  document.getElementById('levelHard').style.background = "#9CD4FE";
-  document.getElementById('level').innerText = "Hard? Up for a challenge, I presume.";
-  document.getElementById('levelexplin').innerText = 'This mode will give you 10 seconds for each guess or it will enter your last guess. You can only choose from the words in the list.';
-  mode = 'hard'
+}
+function modeMedium() {
+  document.getElementById("levelEasy").style.background = scheme[3];
+  document.getElementById("levelMedium").style.background = scheme[1];
+  document.getElementById("levelHard").style.background = scheme[3];
+  document.getElementById("level").innerText =
+    "Medium? Not too easy, not too hard.";
+  document.getElementById("levelexplin").innerText =
+    "This mode will give you a time limit of 3 miniutes to solve the Wordle and you can choose any word you like.";
+  mode = "medium";
+  document.getElementById("gobutton").style.display = "block";
+}
+function modeHard() {
+  document.getElementById("levelEasy").style.background = scheme[3];
+  document.getElementById("levelMedium").style.background = scheme[3];
+  document.getElementById("levelHard").style.background = scheme[1];
+  document.getElementById("level").innerText =
+    "Hard? Up for a challenge, I presume.";
+  document.getElementById("levelexplin").innerText =
+    "This mode will give you 10 seconds for each guess or it will enter your last guess. You can only choose from the words in the list.";
+  mode = "hard";
   document.getElementById("gobutton").style.display = "block";
 }
 var board = [
@@ -1926,7 +1961,9 @@ var words = [
   "zones",
   "zonks",
   "zooms",
-].toSorted().filter(function mrLenny(x) {
+]
+  .toSorted()
+  .filter(function mrLenny(x) {
     return (x.length = 5);
   });
 var keydown = "";
@@ -1957,6 +1994,7 @@ function refresh2() {
     document.getElementById("suggestionsInner").innerHTML = refreshSuggest;
   }, 5);
 }
+
 setTimeout(() => {
   for (m = 0; m < left.length; m++) {
     refreshSuggest = refreshSuggest.concat(
@@ -2030,6 +2068,31 @@ function getRandomInt(min, max) {
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
 }
+function hardtimer() {
+  time = Date.now();
+  for (var l = 0; l < 5; l++) {
+    board[loc.y][l].colour = check(
+      board[loc.y].map(({ text }) => text.toLowerCase()),
+      secretWord.split("")
+    )[l];
+  }
+  loc.y++;
+  loc.x = 0;
+  console.log(loc.y >= 6 && win == false);
+  if (loc.y >= 6 && win == false) {
+    document.getElementById("loseModal").style.display = "block";
+    document.getElementById("left").innerText = `${left.length}`;
+  } else {
+    funnel();
+    hardtime = setInterval(() => {
+      for (hardy = 0; hardy < 5; hardy++) {
+        board[loc.y][hardy].text = board[loc.y - 1][hardy].text;
+      }
+      clearInterval(hardtime);
+      hardtimer();
+    }, 15000);
+  }
+}
 document.addEventListener("keyup", function (event) {
   keyup = event.key;
   if (
@@ -2067,10 +2130,7 @@ function check(guess, real) {
   return colreturn;
 }
 setInterval(() => {
-  //when they reached the mountain's summit, even clancy took a pull. It might well make the boldest hold their breath. The wild hop scrub grew thickly and the hidden ground was full Of wombat holes and any slip was death. But the man from snowy river let the pony have his head.
-}, 50);
-setInterval(() => {
-  if (!win || go) {
+  if (!win) {
     refresh = "";
     refresh = refresh.concat(
       `<div id='guess1' class='word' style='position: relative; width: 720px; height: 120px; background-color:${scheme[0]} ; border-radius: 15px; border: 5px solid ${scheme[0]}; left: 5px; top: 05px;'>\n<div id='word1letter1' style='width: 120px; height: 120px; color: #000; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 60px; font-weight: bold; line-height: 10px; border-radius: 15px; text-align: center; position: absolute; background-color:` +
@@ -2220,13 +2280,32 @@ setInterval(() => {
   }
 }, 1);
 setInterval(() => {
-  document.getElementById("times").innerText = `${Math.floor(
-    Math.floor((Date.now() - time) / 1000) / 60
-  )
-    .toString()
-    .padStart(2, "0")}:${(Math.floor((Date.now() - time) / 1000) % 60)
-    .toString()
-    .padStart(2, "0")}`;
+  if (mode !== "hard") {
+    if (mode == "easy") {
+    
+      document.getElementById("times").innerText = `${Math.floor(
+        Math.floor((Date.now() - time) / 1000) / 60
+      )
+        .toString()
+        .padStart(2, "0")}:${(Math.floor((Date.now() - time) / 1000) % 60)
+        .toString()
+        .padStart(2, "0")}`;
+  } else{
+    document.getElementById("times").innerText = `${Math.floor(
+      Math.floor(((time+181000) - Date.now()) / 1000) / 60
+    )
+      .toString()
+      .padStart(2, "0")}:${(Math.floor(((time+181000) - Date.now()) / 1000) % 60)
+      .toString()
+      .padStart(2, "0")}`;
+  }
+  } else if (loc.y !== 0 && loc.y !== 6) {
+    document.getElementById("times").innerText = `${(
+      Math.ceil((time + 15000 - Date.now()) / 1000) % 60
+    ).toString()}`;
+  } else {
+    document.getElementById("times").innerText = "0";
+  }
 }, 1);
 function funnel() {
   left = left.filter(function bbokay(x) {
@@ -2246,108 +2325,228 @@ function funnel() {
     return true;
   });
 }
-function gotime(){
-  document.getElementById('startModal').style.display = 'none';
-document.addEventListener("keydown", function (event) {
-  keydown = event.key;
-  document.getElementById("notifications").style.display = "none";
-  if (keydown == "Control") {
-    refresh2()        
+function gotime(keea) {
+  clearInterval(medtime)
+  scheme = [
+    document.getElementById("colour2").value,
+    document.getElementById("colour1").value,
+    document.getElementById("colour3").value,
+    document.getElementById("colour4").value,
+    document.getElementById("colour5").value,
+    document.getElementById("colour6").value,
+  ];
+  if (mode == "hard") {
+    document.getElementById("suggestions").style.display = "none";
+    modeHard();
   }
-  if (
-    keydown.toLowerCase().charCodeAt(0) > 96 &&
-    keydown.toLowerCase().charCodeAt(0) < 123 &&
-    keydown.split("").length == 1 &&
-    keypress == false &&
-    keydown !== " "
-  ) {
-    if (loc.x <= 4 && board[loc.y][loc.x].text == "") {
-      board[loc.y][loc.x].text = keydown.toUpperCase();
-    }
-    if (loc.x < 4) {
-      loc.x++;
-      keypress = true;
-    }
+  if(mode == "easy"){
+    modeEasy();
   }
-  if (
-    keydown == "Enter" &&
-    keypress == false &&
-    loc.x == 4 &&
-    board[loc.y][loc.x].text !== ""
-  ) {
+  if(mode == "medium"){
+    modeMedium();
+    medtime = setTimeout(() => {
+      if(!win){
+        document.getElementById("loseModal").style.display = "block";
+        document.getElementById("left").innerText = `${left.length}`;
+      }
+    }, 181000);
+  }
+  document.getElementById("startModal").style.background = `${scheme[2]}cc`;
+  document.getElementById("levelEExplin").style.background = scheme[2];
+  document.getElementById("gobutton").style.background = scheme[2];
+  document.getElementById("startModal").style.display = "none";
+  document.getElementById("winModal").style.background = scheme[3];
+  document.getElementById("loseModal").style.background = scheme[4];
+  board = [
+    [
+      { text: "", colour: scheme[1] },
+      { text: "", colour: scheme[1] },
+      { text: "", colour: scheme[1] },
+      { text: "", colour: scheme[1] },
+      { text: "", colour: scheme[1] },
+    ],
+    [
+      { text: "", colour: scheme[1] },
+      { text: "", colour: scheme[1] },
+      { text: "", colour: scheme[1] },
+      { text: "", colour: scheme[1] },
+      { text: "", colour: scheme[1] },
+    ],
+    [
+      { text: "", colour: scheme[1] },
+      { text: "", colour: scheme[1] },
+      { text: "", colour: scheme[1] },
+      { text: "", colour: scheme[1] },
+      { text: "", colour: scheme[1] },
+    ],
+    [
+      { text: "", colour: scheme[1] },
+      { text: "", colour: scheme[1] },
+      { text: "", colour: scheme[1] },
+      { text: "", colour: scheme[1] },
+      { text: "", colour: scheme[1] },
+    ],
+    [
+      { text: "", colour: scheme[1] },
+      { text: "", colour: scheme[1] },
+      { text: "", colour: scheme[1] },
+      { text: "", colour: scheme[1] },
+      { text: "", colour: scheme[1] },
+    ],
+    [
+      { text: "", colour: scheme[1] },
+      { text: "", colour: scheme[1] },
+      { text: "", colour: scheme[1] },
+      { text: "", colour: scheme[1] },
+      { text: "", colour: scheme[1] },
+    ],
+  ];
+  if (keea) {
+    keypresser();
+  }
+  document.getElementById("startModal").style.display = "none";
+  time = Date.now();
+  document.getElementById("suggestionsInner").style.overflowY = "scroll";
+  document.getElementById("time").style.display = "block";
+  document.getElementById("board").style.background = scheme[5];
+  document.getElementById("time").style.background = scheme[5];
+  document.getElementById("suggestions").style.background = scheme[3];
+  document.getElementById("suggestionsInner").style.background = scheme[0];
+}
+function keypresser() {
+  document.addEventListener("keydown", function (event) {
+    keydown = event.key;
+    document.getElementById("notifications").style.display = "none";
     if (
-      words.includes(
+      keydown.toLowerCase().charCodeAt(0) > 96 &&
+      keydown.toLowerCase().charCodeAt(0) < 123 &&
+      keydown.split("").length == 1 &&
+      keypress == false &&
+      keydown !== " "
+    ) {
+      if (loc.x <= 4 && board[loc.y][loc.x].text == "") {
+        board[loc.y][loc.x].text = keydown.toUpperCase();
+      }
+      if (loc.x < 4) {
+        loc.x++;
+        keypress = true;
+      }
+    }
+    if (
+      keydown == "Enter" &&
+      keypress == false &&
+      loc.x == 4 &&
+      board[loc.y][loc.x].text !== ""
+    ) {
+      if (mode !== "hard") {
+        if (
+          words.includes(
+            `${board[loc.y].map(({ text }) => text.toLowerCase())[0]}${
+              board[loc.y].map(({ text }) => text.toLowerCase())[1]
+            }${board[loc.y].map(({ text }) => text.toLowerCase())[2]}${
+              board[loc.y].map(({ text }) => text.toLowerCase())[3]
+            }${board[loc.y].map(({ text }) => text.toLowerCase())[4]}`
+          )
+        ) {
+          for (var l = 0; l < 5; l++) {
+            board[loc.y][l].colour = check(
+              board[loc.y].map(({ text }) => text.toLowerCase()),
+              secretWord.split("")
+            )[l];
+          }
+          funnel();
+          if (
+            board[loc.y]
+              .map(({ colour }) => colour)
+              .filter(function blah(x) {
+                return x == scheme[3];
+              }).length == 5
+          ) {
+            setTimeout(() => {
+              win = true;
+              document.getElementById("winModal").style.display = "block";
+              document.getElementById("score").innerText = `${Math.floor(
+                Math.floor((Date.now() - time) / 1000) / 60
+              )}:${Math.floor((Date.now() - time) / 1000) % 60}`;
+              if (loc.y > 1) {
+                document.getElementById("tries").innerText = `${loc.y} tries`;
+              } else {
+                document.getElementById("tries").innerText = `${loc.y} try`;
+              }
+            }, 200);
+          }
+          refreshSuggest = "";
+          for (m = 0; m < left.length; m++) {
+            refreshSuggest = refreshSuggest.concat(
+              `<div style="position: relative; top:${
+                5 * m
+              };font-size:30px;font-family: Arial Rounded MT Bold, Helvetica, sans-serif; font-weight: bolder; text-align: center;">${
+                left[m]
+              }</div>`
+            );
+          }if (mode == "easy") {
+            
+            document.getElementById("suggestionsInner").innerHTML =
+              refreshSuggest;
+          }
+          loc.x = 0;
+          loc.y++;
+          setTimeout(() => {
+            if (loc.y == 6 && win == false) {
+              document.getElementById("loseModal").style.display = "block";
+              document.getElementById("left").innerText = `${left.length}`;
+            }
+          }, 500);
+        } else {
+          document.getElementById("notifications").innerText = "Not a word";
+          document.getElementById("notifications").style.display = "block";
+          document.getElementById("notifications").style.background =
+            board[0][2];
+          document.getElementById("notifications").style.color = "#ff4444";
+        }
+      } else {
+        if (words.includes(
         `${board[loc.y].map(({ text }) => text.toLowerCase())[0]}${
           board[loc.y].map(({ text }) => text.toLowerCase())[1]
         }${board[loc.y].map(({ text }) => text.toLowerCase())[2]}${
           board[loc.y].map(({ text }) => text.toLowerCase())[3]
         }${board[loc.y].map(({ text }) => text.toLowerCase())[4]}`
-      )
-    ) {
-      for (var l = 0; l < 5; l++) {
-        board[loc.y][l].colour = check(
-          board[loc.y].map(({ text }) => text.toLowerCase()),
-          secretWord.split("")
-        )[l];
-      }
-      funnel();
-      if (
-        board[loc.y]
-          .map(({ colour }) => colour)
-          .filter(function blah(x) {
-            return x == scheme[3];
-          }).length == 5
-      ) {
-        setTimeout(() => {
-          win = true;
-          document.getElementById("winModal").style.display = "block";
-          document.getElementById("score").innerText = `${Math.floor(
-            Math.floor((Date.now() - time) / 1000) / 60
-          )}:${Math.floor((Date.now() - time) / 1000) % 60}`;
-          if (loc.y > 1) {
-            document.getElementById("tries").innerText = `${loc.y} tries`;
+      )) {
+        
+          if (loc.y == 0) {
+            hardtimer();
           } else {
-            document.getElementById("tries").innerText = `${loc.y} try`;
+            clearInterval(hardtime);
+            hardtimer();
           }
-        }, 200);
+      } else{
+        document.getElementById("notifications").innerText = "Not a word";
+        document.getElementById("notifications").style.display = "block";
+        document.getElementById("notifications").style.background =
+          board[0][2];
+        document.getElementById("notifications").style.color = "#ff4444";
       }
-      refreshSuggest = "";
-      for (m = 0; m < left.length; m++) {
-        refreshSuggest = refreshSuggest.concat(
-          `<div style="position: relative; top:${
-            5 * m
-          };font-size:30px;font-family: Arial Rounded MT Bold, Helvetica, sans-serif; font-weight: bolder; text-align: center;">${
-            left[m]
-          }</div>`
-        );
       }
-      document.getElementById("suggestionsInner").innerHTML = refreshSuggest;
-      loc.x = 0;
-      loc.y++;
-      setTimeout(() => {
-        if (loc.y == 6 && win == false) {
-          document.getElementById("loseModal").style.display = "block";
-          document.getElementById("left").innerText = `${left.length}`;
-        }
-      }, 500);
-    } else {
-      document.getElementById("notifications").innerText = "Not a word";
-      document.getElementById("notifications").style.display = "block";
-      document.getElementById("notifications").style.background = board[0][2];
-      document.getElementById("notifications").style.color = "#ff4444";
     }
-  }
-  if (keydown == "Backspace" && keypress == false) {
-    board[loc.y][loc.x].text = "";
-    keypress = true;
-    if (loc.x > 0) {
-      loc.x--;
+    if (keydown == "Backspace" && keypress == false) {
+      board[loc.y][loc.x].text = "";
+      keypress = true;
+      if (loc.x > 0) {
+        loc.x--;
+      }
     }
-  }
-  console.log(keydown);
-});
-
-time = Date.now();
-document.getElementById("suggestionsInner").style.overflowY = "scroll";
-document.getElementById("time").style.display = "block";
+    console.log(keydown);
+    if (keydown == "Control") {
+      refresh2();
+    }
+  });
+}
+function rego() {
+  document.getElementById("startModal").style.display = "block";
+  document.getElementById("loseModal").style.display = "none";
+  document.getElementById("winModal").style.display = "none";
+  document.getElementById("suggestions").style.display = "block";
+  document.getElementById("suggestionsInner").style.overflowY = "hidden";
+  document.getElementById("time").style.display = "none";
+  refresh2();
 }

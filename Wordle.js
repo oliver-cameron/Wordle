@@ -1961,6 +1961,9 @@ var words = [
   "zones",
   "zonks",
   "zooms",
+  "chill",
+  "woods",
+  "saxon"
 ]
   .toSorted()
   .filter(function mrLenny(x) {
@@ -2076,11 +2079,14 @@ function hardtimer() {
       secretWord.split("")
     )[l];
   }
+  funnel()
   loc.y++;
   loc.x = 0;
   console.log(loc.y >= 6 && win == false);
   if (loc.y >= 6 && win == false) {
     document.getElementById("loseModal").style.display = "block";
+    document.getElementById("notifications").style.display = "none"
+    document.getElementById("notifications").innerText = secretWord
     document.getElementById("left").innerText = `${left.length}`;
   } else {
     funnel();
@@ -2347,6 +2353,8 @@ function gotime(keea) {
     medtime = setTimeout(() => {
       if(!win){
         document.getElementById("loseModal").style.display = "block";
+        document.getElementById("notifications").style.display = "none"
+        document.getElementById("notifications").innerText = secretWord
         document.getElementById("left").innerText = `${left.length}`;
       }
     }, 181000);
@@ -2494,6 +2502,8 @@ function keypresser() {
           setTimeout(() => {
             if (loc.y == 6 && win == false) {
               document.getElementById("loseModal").style.display = "block";
+              document.getElementById("notifications").style.display = "none"
+              document.getElementById("notifications").innerText = secretWord
               document.getElementById("left").innerText = `${left.length}`;
             }
           }, 500);
